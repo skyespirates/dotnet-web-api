@@ -7,9 +7,9 @@ namespace project_service.Repositories
 {
     public class TodoRepository : ITodoRepository
     {
-        private readonly TodoContext _context;
+        private readonly DataContext _context;
 
-        public TodoRepository(TodoContext context) { 
+        public TodoRepository(DataContext context) { 
             _context = context;
         }
 

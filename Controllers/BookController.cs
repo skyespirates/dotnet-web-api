@@ -9,9 +9,9 @@ namespace project_service.Controllers
     [ApiController]
     public class BookController: ControllerBase
     {
-        private readonly TodoContext _context;
+        private readonly DataContext _context;
 
-        public BookController(TodoContext context)
+        public BookController(DataContext context)
         {
             _context = context;
         }

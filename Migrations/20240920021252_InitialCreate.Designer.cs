@@ -10,7 +10,7 @@ using project_service.Data;
 
 namespace project_service.Migrations
 {
-    [DbContext(typeof(TodoContext))]
+    [DbContext(typeof(DataContext))]
     [Migration("20240920021252_InitialCreate")]
     partial class InitialCreate
     {

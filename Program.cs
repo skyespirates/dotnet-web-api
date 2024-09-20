@@ -12,7 +12,7 @@ if (builder.Configuration == null)
 }
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<TodoContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
 
 // Add services to the container.
 builder.Services.AddScoped<ITodoService, TodoService>();
