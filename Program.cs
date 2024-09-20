@@ -11,6 +11,12 @@ if (builder.Configuration == null)
     throw new Exception("Configuration is not initialized!");
 }
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.MaxDepth = 1000; // Set the maximum depth here
+    });
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
 

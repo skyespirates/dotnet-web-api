@@ -7,8 +7,9 @@ namespace project_service.Entities
         [Key]
         public int book_id {get; set;}
         public string book_title {get; set;}
-
-        public string author {get; set;}
+        public string? author {get; set;}
+        public int? borrower_id {get; set;}
+        public Student? borrower {get; set;}
     }
     
 }
