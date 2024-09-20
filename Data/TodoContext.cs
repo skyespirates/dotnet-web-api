@@ -7,5 +7,6 @@ namespace project_service.Data
         public TodoContext(DbContextOptions<TodoContext> options) : base(options) { }
 
         public DbSet<Todo> Todos { get; set; }
-    }
+        public DbSet<Book> Books { get; set; }
+     }
 }
