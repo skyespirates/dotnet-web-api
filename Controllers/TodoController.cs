@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using project_service.Interfaces;
 using project_service.Entities;
+using AutoMapper;
+using project_service.Dtos;
 
 namespace project_service.Controllers
 {
@@ -9,16 +11,20 @@ namespace project_service.Controllers
     public class TodoController : ControllerBase
     {
         private readonly ITodoService _service;
+        private readonly IMapper _mapper;
 
-        public TodoController(ITodoService service)
+        public TodoController(ITodoService service, IMapper mapper)
         {
             _service = service;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Todo>>> GetTodos()
+        public async Task<ActionResult> GetTodos()
         {
-            return Ok(await _service.GetAllTodosAsync());
+            var rawTodos = await _service.GetAllTodosAsync();
+            var Todos = _mapper.Map<IEnumerable<TodoDto>>(rawTodos);
+            return Ok(Todos);
         }
 
         [HttpGet("{id}")]

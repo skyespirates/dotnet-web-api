@@ -13,6 +13,9 @@ if (builder.Configuration == null)
     throw new Exception("Configuration is not initialized!");
 }
 
+// Configure automapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 /*
     ! For now, I found it better using JsonSerializerOptions
     ! instead of using DTO
@@ -45,7 +48,9 @@ builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(conne
 
 // Add services to the container.
 builder.Services.AddScoped<ITodoService, TodoService>();
-builder.Services.AddScoped<ITodoRepository, TodoRepository>();
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<ITodoRepository, TodoRepository>();;
+builder.Services.AddScoped<IBookRepository, BookRepository>();
 
 
 builder.Services.AddControllers();

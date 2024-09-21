@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using project_service.Data;
-using project_service.DTO;
+using project_service.Dtos;
 using project_service.Entities;
 using project_service.Utils;
 

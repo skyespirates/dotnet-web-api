@@ -1,6 +1,6 @@
 using System;
 
-namespace project_service.DTO;
+namespace project_service.Dtos;
 
 public class StudentDto
 {

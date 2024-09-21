@@ -1,7 +1,8 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using project_service.Data;
+using project_service.Dtos;
 using project_service.Entities;
+using project_service.Interfaces;
 
 namespace project_service.Controllers
 {
@@ -9,17 +10,29 @@ namespace project_service.Controllers
     [ApiController]
     public class BookController: ControllerBase
     {
-        private readonly DataContext _context;
 
-        public BookController(DataContext context)
+        public readonly IBookService _service;
+        public readonly IMapper _mapper;
+        public BookController(IBookService service, IMapper mapper)
         {
-            _context = context;
+            _service = service;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        public async Task<IActionResult> GetBooks()
         {
-            return Ok(await _context.Books.ToListAsync());
+            var rawBooks = await _service.GetBooksAsync();
+            var books = _mapper.Map<IEnumerable<BookDto>>(rawBooks);
+            return Ok(books);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetBookById(int id)
+        {
+            var rawBook = await _service.GetBookAsync(id);
+            var book = _mapper.Map<BookDto>(rawBook);
+            return Ok(book);
         }
     }
 }
