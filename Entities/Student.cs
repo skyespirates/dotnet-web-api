@@ -8,7 +8,7 @@ public class Student
 {
     [Key]
     public int student_id {get; set;}
-    public string student_name {get; set;}
+    public required string student_name {get; set;}
     public ICollection<Book>? BorrowedBooks {get; set;}
 
     public void BorrowBook(int book_id, DataContext context)
