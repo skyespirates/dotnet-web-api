@@ -47,10 +47,12 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
 
 // Add services to the container.
+builder.Services.AddScoped<ITodoRepository, TodoRepository>();
+builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<ITodoService, TodoService>();
 builder.Services.AddScoped<IBookService, BookService>();
-builder.Services.AddScoped<ITodoRepository, TodoRepository>();;
-builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<ILibraryService, LibraryService>();
 
 
 builder.Services.AddControllers();

@@ -12,19 +12,32 @@ namespace project_service.Repositories
         {
             _context = context;
         }
-        public async Task<IEnumerable<Book>> GetAllAsync()
+        
+        public async Task<IEnumerable<Book>> GetAllBooks()
         {
-            return await _context.Books.ToListAsync();
+            var books = await _context.Books.ToListAsync();
+            return books;
         }
-
-        public async Task<Book> GetByIdAsync(int id) 
+        public async Task<Book> GetBookById(int id)
         {
-            var book = await _context.Books.Include(b => b.borrower).FirstOrDefaultAsync(b => b.book_id == id);
-            if (book == null)
-            {
-                throw new KeyNotFoundException($"Book with ID {id} not found.");
-            }
+            var book = await _context.Books.FindAsync(id);
             return book;
+        }
+        public async Task AddBook(Book book)
+        {
+            _context.Books.Add(book);
+            await _context.SaveChangesAsync();
+        }
+        public async Task UpdateBook(Book book)
+        {
+            _context.Books.Update(book);
+            await _context.SaveChangesAsync();
+        }
+        public async Task DeleteBook(Book book)
+        {
+
+            _context.Books.Remove(book);
+            await _context.SaveChangesAsync();
         }
     }
 }

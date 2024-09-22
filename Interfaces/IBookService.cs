@@ -6,5 +6,6 @@ namespace project_service.Interfaces
     {
         Task<IEnumerable<Book>> GetBooksAsync();
         Task<Book> GetBookAsync(int id);
+        Task AddBook(Book book);
     }
 }

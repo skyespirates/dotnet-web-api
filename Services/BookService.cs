@@ -13,11 +13,15 @@ namespace project_service.Services
         }
         public async Task<IEnumerable<Book>> GetBooksAsync()
         {
-            return await _repository.GetAllAsync();
+            return await _repository.GetAllBooks();
         }
         public async Task<Book> GetBookAsync(int id)
         {
-            return await _repository.GetByIdAsync(id);
+            return await _repository.GetBookById(id);
+        }
+        public async Task AddBook(Book book)
+        {
+            await _repository.AddBook(book);
         }
     }
 }

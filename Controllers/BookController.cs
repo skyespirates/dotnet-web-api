@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using project_service.Dtos;
 using project_service.Entities;
 using project_service.Interfaces;
+using project_service.Utils;
 
 namespace project_service.Controllers
 {
@@ -25,6 +26,14 @@ namespace project_service.Controllers
             var rawBooks = await _service.GetBooksAsync();
             var books = _mapper.Map<IEnumerable<BookDto>>(rawBooks);
             return Ok(books);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddBook([FromBody] AddBookRequest req)
+        {
+            var book = new Book { book_title = req.book_title, author = req.author };
+            await _service.AddBook(book);
+            return Ok();
         }
 
         [HttpGet("{id}")]
