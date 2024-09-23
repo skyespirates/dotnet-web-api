@@ -52,6 +52,7 @@ builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<ITodoService, TodoService>();
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ILibraryService, LibraryService>();
 
 

@@ -9,9 +9,11 @@ namespace project_service.Profiles
         public Profiles()
         {
             CreateMap<Todo, TodoDto>();
-            CreateMap<Book, BookDto>().ReverseMap()
-                .ForMember(dest => dest.borrower, opt => opt.MapFrom(src => src.borrower != null ? src.borrower : null));
-            CreateMap<Student, StudentDto>().ReverseMap();
+            //CreateMap<Book, BookDto>()
+            //    .ForMember(dest => dest.borrower, opt => opt.MapFrom(src => src.borrower != null ? src.borrower : null));
+            CreateMap<Student, StudentDto>().ReverseMap()
+                .ForMember(dest => dest.BorrowedBooks, opt => opt.MapFrom(src => src.BorrowedBooks));
+            CreateMap<BorrowedBooks, Book>().ReverseMap();
         }
     }
 }

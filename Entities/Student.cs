@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using project_service.Data;
+using project_service.Dtos;
 
 namespace project_service.Entities;
 

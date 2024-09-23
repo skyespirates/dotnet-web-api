@@ -19,8 +19,14 @@ namespace project_service.Repositories
         }
         public async Task<Student> GetStudentById(int id)
         {
-            var student = await _context.Students.FindAsync(id);
+            var student = await _context.Students.Include(s => s.BorrowedBooks).FirstOrDefaultAsync(s => s.student_id == id);
             if(student == null) throw new KeyNotFoundException("Student not found");
+            return student;
+        }
+        public async Task<Student> GetStudentByName(string name)
+        {
+            var student = await _context.Students.Where(s => s.student_name == name).FirstOrDefaultAsync();
+            if (student == null) throw new KeyNotFoundException("Student not found");
             return student;
         }
         public async Task AddStudent(Student student)
