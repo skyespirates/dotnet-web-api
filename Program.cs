@@ -5,6 +5,7 @@ using project_service.Interfaces;
 using project_service.Repositories;
 using project_service.Services;
 using System.Text.Json;
+using project_service.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,6 +63,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// add custom middleware
+app.UseLoggingMiddleware();
+app.UseChangeResponseMiddleware();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
