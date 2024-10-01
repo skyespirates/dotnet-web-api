@@ -8,7 +8,8 @@ namespace project_service.Data
 
         public DbSet<Todo> Todos { get; set; }
         public DbSet<Book> Books { get; set; }
-        public DbSet<Student> Students {get; set;}
+        public DbSet<Student> Students { get; set; }
+        public DbSet<User> Users { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Student>()
@@ -29,6 +30,10 @@ namespace project_service.Data
                 new Book { book_id = 12, book_title = "One Punch Man", author = "Yusuke Murate", borrower_id = 6 }
                 );
 
+            modelBuilder.Entity<User>().HasKey(u => u.Id);
+            modelBuilder.Entity<User>().HasData(
+                new User { Id = 1, Name = "skyes", Password = "test123" }
+                );
         }
     }
 }

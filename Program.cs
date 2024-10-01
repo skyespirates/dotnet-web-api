@@ -51,10 +51,13 @@ builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(conne
 builder.Services.AddScoped<ITodoRepository, TodoRepository>();
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITodoService, TodoService>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ILibraryService, LibraryService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 
 
 builder.Services.AddControllers();
@@ -66,7 +69,7 @@ var app = builder.Build();
 
 // add custom middleware
 app.UseLoggingMiddleware();
-app.UseChangeResponseMiddleware();
+//app.UseChangeResponseMiddleware();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
