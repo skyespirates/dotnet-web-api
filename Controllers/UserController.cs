@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.IdentityModel.Tokens;
 using project_service.Entities;
 using project_service.Interfaces;
+using project_service.Utils;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection.Metadata.Ecma335;
+using System.Text;
 
 namespace project_service.Controllers
 {
@@ -12,10 +16,12 @@ namespace project_service.Controllers
     {
         private readonly IUserService _service;
         private readonly ILogger<UserController> _logger;
-        public UserController(IUserService service, ILogger<UserController> logger) 
+        private readonly IConfiguration _config;
+        public UserController(IUserService service, ILogger<UserController> logger, IConfiguration config) 
         {
             _service = service;
             _logger = logger;
+            _config = config;
         }
 
         [HttpGet]
@@ -37,12 +43,20 @@ namespace project_service.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] User user)
+        public async Task<IActionResult> Login([FromBody] LoginRequest body)
         {
-            var result =  await _service.Authenticate(user);
-            _logger.LogInformation($"************************ result: {result}");
-            if (result == false) return Unauthorized("Unauthorized");
-            return Ok("Login successfully");
+            _logger.LogInformation($"************************ result: {body.username}");
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"])); 
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var Sectoken = new JwtSecurityToken(_config["Jwt:Issuer"],
+              _config["Jwt:Issuer"],
+              null,
+              expires: DateTime.Now.AddMinutes(120),
+              signingCredentials: credentials);
+
+            var token = new JwtSecurityTokenHandler().WriteToken(Sectoken);
+
+            return Ok(token);
         }
     }
 }

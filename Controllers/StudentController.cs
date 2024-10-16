@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using project_service.Dtos;
@@ -7,7 +8,7 @@ using project_service.Interfaces;
 
 namespace project_service.Controllers
 {
-
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class StudentController : ControllerBase
@@ -22,7 +23,7 @@ namespace project_service.Controllers
         [HttpGet]
         public async Task<IActionResult> GetStudents([FromQuery] string name = "")
         {
-            if (!name.IsNullOrEmpty()) 
+            if (!string.IsNullOrEmpty(name)) 
             { 
                 var student = await _service.GetStudentByName(name);
                 return Ok(student);
