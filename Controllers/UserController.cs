@@ -4,9 +4,14 @@ using Microsoft.IdentityModel.Tokens;
 using project_service.Entities;
 using project_service.Interfaces;
 using project_service.Utils;
+using project_service.Utils.Response;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection.Metadata.Ecma335;
+using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text;
+using System.Collections;
+using project_service.Utils.Request;
 
 namespace project_service.Controllers
 {
@@ -36,27 +41,46 @@ namespace project_service.Controllers
             return _service.GetUserById(id);
         }
 
-        [HttpPost("register")]
-        public Task Register([FromBody] User user)
-        {
-            return _service.AddUser(user);
-        }
+        //[HttpPost("register")]
+        //public Task Register([FromBody] RegisterUser user)
+        //{
+        //    return _service.AddUser();
+        //}
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest body)
         {
-            _logger.LogInformation($"************************ result: {body.username}");
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"])); 
+            _logger.LogInformation($"['info', 'Login']");
+            //byte[] secret = Convert.FromBase64String(_config["Jwt:Key"]);
+            //string decodedString = Encoding.UTF8.GetString(secret);
+            //var securityKey = new SymmetricSecurityKey(secret);
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var Sectoken = new JwtSecurityToken(_config["Jwt:Issuer"],
+            var claims = new List<Claim> { 
+                new Claim(ClaimTypes.Name, body.username),
+                new Claim(ClaimTypes.Email, "skyes@email.com"),
+                new Claim(ClaimTypes.Surname, "crawford")
+            };
+
+            var accToken = new JwtSecurityToken(
               _config["Jwt:Issuer"],
-              null,
-              expires: DateTime.Now.AddMinutes(120),
+              _config["Jwt:Audience"],
+              claims,
+              expires: DateTime.UtcNow.AddMinutes(60),
               signingCredentials: credentials);
 
-            var token = new JwtSecurityTokenHandler().WriteToken(Sectoken);
+            var refToken = new JwtSecurityToken(
+              _config["Jwt:Issuer"],
+              _config["Jwt:Audience"],
+              claims,
+              expires: DateTime.UtcNow.AddMinutes(360),
+              signingCredentials: credentials);
 
-            return Ok(token);
+
+            var accessToken = new JwtSecurityTokenHandler().WriteToken(accToken);
+            var refreshToken = new JwtSecurityTokenHandler().WriteToken(refToken);
+            Token tokens = new Token { AccessToken = accessToken, RefreshToken = refreshToken };
+            return Ok(tokens);  
         }
     }
 }

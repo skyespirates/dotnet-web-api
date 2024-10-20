@@ -13,6 +13,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
+var jwtAudience = builder.Configuration.GetSection("Jwt:Audience").Get<string>();
 var jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>();
 
 if (builder.Configuration == null)
@@ -69,12 +70,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
  {
      options.TokenValidationParameters = new TokenValidationParameters
      {
-         ValidateIssuer = true,
-         ValidateAudience = true,
-         ValidateLifetime = true,
+         ValidateIssuer = false,
+         ValidateAudience = false,
+         ValidateLifetime = false,
          ValidateIssuerSigningKey = true,
          ValidIssuer = jwtIssuer,
-         ValidAudience = jwtIssuer,
+         ValidAudience = jwtAudience,
          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
      };
  });
