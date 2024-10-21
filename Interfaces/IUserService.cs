@@ -6,7 +6,9 @@ namespace project_service.Interfaces
     {
         Task<IEnumerable<User>> GetAllUsers();
         Task<User> GetUserById(int id);
-        Task AddUser(User user);
+        Task<User> GetUserByName(string name);
+        Task<int> AddUser(User user);
+        Task<int> RegisterUser(string username, string password);
         Task<bool> Authenticate(User user);
     }
 }

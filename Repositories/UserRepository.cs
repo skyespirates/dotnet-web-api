@@ -22,11 +22,15 @@ namespace project_service.Repositories
         {
             var student = await _context.Users.FindAsync(id);
             return student;
+        }public async Task<User> GetUserByName(string name)
+        {
+            var student = await _context.Users.SingleOrDefaultAsync(u => u.Name == name);
+            return student;
         }
-        public async Task AddUser(User user)
+        public async Task<int> AddUser(User user)
         {
             _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
         }
         public async Task<bool> AuthenticateUser(User user)
         {

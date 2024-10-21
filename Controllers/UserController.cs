@@ -41,11 +41,64 @@ namespace project_service.Controllers
             return _service.GetUserById(id);
         }
 
-        //[HttpPost("register")]
-        //public Task Register([FromBody] RegisterUser user)
-        //{
-        //    return _service.AddUser();
-        //}
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterUser user)
+        {
+            var isUserDuplicate = await _service.GetUserByName(user.Username);
+            if(isUserDuplicate != null)
+            {
+                return BadRequest("username already exists");
+            }
+            var result = await _service.RegisterUser(user.Username, user.Password);
+            _logger.LogInformation($"['info' 'Register'] | {result}");
+
+            return Ok("user registered successfully");
+        }
+
+
+        [HttpPost("authenticate")]
+        public async Task<ActionResult<bool>> Authenticate([FromBody] RegisterUser user)
+        {
+            var result = await _service.GetUserByName(user.Username);
+
+            if(result == null)
+            {
+                return Unauthorized();
+            }
+            _logger.LogInformation($"user -> {result.Name}");
+            var res = BCrypt.Net.BCrypt.Verify(user.Password, result.Password);
+            if(res == false)
+            {
+                return Unauthorized();
+            }
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var claims = new List<Claim> {
+                new Claim(ClaimTypes.Name, result.Name),
+                new Claim(ClaimTypes.Email, "skyes@email.com"),
+                new Claim(ClaimTypes.Surname, "crawford")
+            };
+
+            var accToken = new JwtSecurityToken(
+              _config["Jwt:Issuer"],
+              _config["Jwt:Audience"],
+              claims,
+              expires: DateTime.UtcNow.AddMinutes(60),
+              signingCredentials: credentials);
+
+            var refToken = new JwtSecurityToken(
+              _config["Jwt:Issuer"],
+              _config["Jwt:Audience"],
+              claims,
+              expires: DateTime.UtcNow.AddMinutes(360),
+              signingCredentials: credentials);
+
+
+            var accessToken = new JwtSecurityTokenHandler().WriteToken(accToken);
+            var refreshToken = new JwtSecurityTokenHandler().WriteToken(refToken);
+            Token tokens = new Token { AccessToken = accessToken, RefreshToken = refreshToken };
+            return Ok(tokens);
+        }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest body)
