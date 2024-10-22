@@ -12,6 +12,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Collections;
 using project_service.Utils.Request;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace project_service.Controllers
 {
@@ -65,18 +66,18 @@ namespace project_service.Controllers
             {
                 return Unauthorized();
             }
-            _logger.LogInformation($"user -> {result.Name}");
             var res = BCrypt.Net.BCrypt.Verify(user.Password, result.Password);
             if(res == false)
             {
                 return Unauthorized();
             }
+            string name = result.Name;
+            byte[] bytes = Encoding.UTF8.GetBytes(name);
+            string base64Encode = Convert.ToBase64String(bytes);
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new List<Claim> {
-                new Claim(ClaimTypes.Name, result.Name),
-                new Claim(ClaimTypes.Email, "skyes@email.com"),
-                new Claim(ClaimTypes.Surname, "crawford")
+                new Claim(ClaimTypes.Name, name),
             };
 
             var accToken = new JwtSecurityToken(
