@@ -11,6 +11,7 @@ public class Student
     public int student_id {get; set;}
     public required string student_name {get; set;}
     public ICollection<Book>? BorrowedBooks {get; set;}
+    public string?  createdBy { get; set; }
 
     public void BorrowBook(int book_id, DataContext context)
     {

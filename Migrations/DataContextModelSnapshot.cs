@@ -45,29 +45,6 @@ namespace project_service.Migrations
                     b.HasIndex("borrower_id");
 
                     b.ToTable("Books");
-
-                    b.HasData(
-                        new
-                        {
-                            book_id = 10,
-                            author = "Eichirou Oda",
-                            book_title = "One Piece",
-                            borrower_id = 5
-                        },
-                        new
-                        {
-                            book_id = 11,
-                            author = "Hajime Isayama",
-                            book_title = "Shingeki No Kyoujin",
-                            borrower_id = 5
-                        },
-                        new
-                        {
-                            book_id = 12,
-                            author = "Yusuke Murate",
-                            book_title = "One Punch Man",
-                            borrower_id = 6
-                        });
                 });
 
             modelBuilder.Entity("project_service.Entities.Student", b =>
@@ -78,6 +55,9 @@ namespace project_service.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("student_id"));
 
+                    b.Property<string>("createdBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("student_name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -85,23 +65,6 @@ namespace project_service.Migrations
                     b.HasKey("student_id");
 
                     b.ToTable("Students");
-
-                    b.HasData(
-                        new
-                        {
-                            student_id = 5,
-                            student_name = "Zilong"
-                        },
-                        new
-                        {
-                            student_id = 6,
-                            student_name = "Freya"
-                        },
-                        new
-                        {
-                            student_id = 7,
-                            student_name = "Martis"
-                        });
                 });
 
             modelBuilder.Entity("project_service.Entities.Todo", b =>

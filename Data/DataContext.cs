@@ -18,17 +18,17 @@ namespace project_service.Data
             .HasForeignKey(b => b.borrower_id)
             .IsRequired(false);
 
-            modelBuilder.Entity<Student>().HasData(
-                new Student { student_id = 5, student_name = "Zilong" },
-                new Student { student_id = 6, student_name = "Freya" },
-                new Student { student_id = 7, student_name = "Martis" }
-                );
+            //modelBuilder.Entity<Student>().HasData(
+            //    new Student { student_id = 5, student_name = "Zilong" },
+            //    new Student { student_id = 6, student_name = "Freya" },
+            //    new Student { student_id = 7, student_name = "Martis" }
+            //    );
 
-            modelBuilder.Entity<Book>().HasData(
-                new Book { book_id = 10, book_title = "One Piece", author = "Eichirou Oda", borrower_id = 5 },
-                new Book { book_id = 11, book_title = "Shingeki No Kyoujin", author = "Hajime Isayama", borrower_id = 5 },
-                new Book { book_id = 12, book_title = "One Punch Man", author = "Yusuke Murate", borrower_id = 6 }
-                );
+            //modelBuilder.Entity<Book>().HasData(
+            //    new Book { book_id = 10, book_title = "One Piece", author = "Eichirou Oda", borrower_id = 5 },
+            //    new Book { book_id = 11, book_title = "Shingeki No Kyoujin", author = "Hajime Isayama", borrower_id = 5 },
+            //    new Book { book_id = 12, book_title = "One Punch Man", author = "Yusuke Murate", borrower_id = 6 }
+            //    );
 
             modelBuilder.Entity<User>().HasKey(u => u.Id);
             modelBuilder.Entity<User>().HasData(

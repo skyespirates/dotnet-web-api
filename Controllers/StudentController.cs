@@ -38,26 +38,14 @@ namespace project_service.Controllers
             {
                 token = authorization.ToString();
             }
-            //_logger.LogInformation($"******** RAW token = {token}");
 
             if (token.StartsWith("Bearer "))
             {
                 token = token.Substring("Bearer ".Length);
             }
-
-            //_logger.LogInformation($"******** clean token = {token}");
-
-            var parts = token.Split('.');
-
-            if (parts.Length == 3)
+            else
             {
-                // Get the second section (the payload)
-                string payload = parts[1];
-                _logger.LogInformation($"-----------> Payload (Base64): {payload}");
-
-                // Optionally decode the Base64 payload to a JSON string
-                string jsonPayload = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(payload));
-                _logger.LogInformation($"-----------> Decoded Payload: {jsonPayload}");
+                return Unauthorized();
             }
 
             //validate token
@@ -70,20 +58,16 @@ namespace project_service.Controllers
                 ValidIssuer = _config["Jwt:Issue"],
                 ValidateAudience = false,
                 ValidAudience = _config["Jwt:Audience"],
-                ValidateLifetime = false,
+                ValidateLifetime = true,
                 ClockSkew = TimeSpan.FromMinutes(5)
             };
 
-            //SecurityToken validatedToken;
-            //ClaimsPrincipal principal = tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
 
             var principal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
             var jwtToken = validatedToken as JwtSecurityToken;
             _logger.LogInformation($"##### jwt token = ${jwtToken}");
 
             var customClaimValue = principal.FindFirst(ClaimTypes.Name)?.Value;
-            //var test = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name);
-            //_logger.LogInformation($"----------> payload: {test} ||| {jwtToken.Payload.ToString}");
             _logger.LogInformation($"principal ====> {customClaimValue}");
             if (!string.IsNullOrEmpty(name)) 
             { 

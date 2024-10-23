@@ -57,8 +57,7 @@ namespace project_service.Migrations
                 name: "FK_Books_Students_borrower_id",
                 table: "Books");
 
-            migrationBuilder.DropTable(
-                name: "Students");
+         
 
             migrationBuilder.DropIndex(
                 name: "IX_Books_borrower_id",

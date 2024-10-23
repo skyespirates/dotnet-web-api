@@ -72,8 +72,6 @@ namespace project_service.Controllers
                 return Unauthorized();
             }
             string name = result.Name;
-            byte[] bytes = Encoding.UTF8.GetBytes(name);
-            string base64Encode = Convert.ToBase64String(bytes);
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new List<Claim> {
